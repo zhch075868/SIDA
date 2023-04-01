@@ -1,0 +1,200 @@
+--1、项目一览表，采购订单
+create  or alter view v_projectAllInReport_purOrder    
+as    
+select  project.fnumber as proNumber    
+,project.fxmid as proId    
+,sum(poOrderEntry.FAllAmountExceptDisCount) as purOrderDisCount  
+from V_VRGO_Project project  --项目    
+inner join T_PUR_POORDERENTRY poOrderEntry on poOrderEntry.f_vrgo_text2=project.fnumber    
+inner join t_pur_poOrder poOrder on poOrder.fid=poOrderEntry.fid and poOrder.fDocumentStatus='C'    
+group by project.fnumber,project.fxmid ;
+
+
+
+create  or alter view v_projectAllInReport_purOrderAll    
+as    
+select 
+ sum(poOrderFinALl.FBillAllAmount) as purOrderALLDisCount 
+,sum(poOrderALl.F_VRGO_yiFuKuanAmount) as purOrderYiFuKuanAmount
+,sum(poOrderALl.F_VRGO_kaiPiaoAmount) as purOrderKaiPiaoAmount
+from t_pur_poOrder poOrderALl 
+inner join t_pur_poOrderFin poOrderFinALl on poOrderFinALl.FID=poOrderALl.FID
+where  poOrderALl.fDocumentStatus='C' ;
+
+
+
+
+
+--2、项目一览表，收料通知单
+create   view v_projectAllInReport_purReceive    
+as    
+select  project.fnumber as proNumber    
+,project.fxmid as proId    
+,sum(purReceiveEntry.FAllAmountExceptDisCount) as purReceiveCount    
+from V_VRGO_Project project  --项目    
+inner join T_PUR_RECEIVEENTRY purReceiveEntry on purReceiveEntry.f_vrgo_text=project.fnumber    
+inner join T_PUR_RECEIVE purReceive on purReceive.fid=purReceiveEntry.fid and purReceive.fDocumentStatus='C'    
+group by project.fnumber,project.fxmid;
+
+
+--3、项目一览表，采购入库单T_STK_INSTOCKENTRY
+create or alter view v_projectAllInReport_purInstock  
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(purInstockEntry.FAllAmountExceptDisCount) as purInstockDisCount  
+from V_VRGO_Project project  --项目  
+inner join T_STK_INSTOCKENTRY purInstockEntry on purInstockEntry.f_vrgo_text=project.fnumber  
+inner join T_STK_INSTOCK purInstock on purInstock.fid=purInstockEntry.fid and purInstock.fDocumentStatus='C'  
+group by project.fnumber,project.fxmid;
+
+
+
+--4、项目一览表，采购退料T_PUR_MRBENTRY
+create   view v_projectAllInReport_purMrb   
+as    
+select  project.fnumber as proNumber    
+,project.fxmid as proId    
+,sum(purMrbEntry.FAllAmountExceptDisCount) as purMrbDisCount    
+from V_VRGO_Project project  --项目    
+inner join T_STK_INSTOCKENTRY purMrbEntry on purMrbEntry.FProjectNo=project.fnumber    
+inner join T_STK_INSTOCK purMrb on purMrb.fid=purMrbEntry.fid and purMrb.fDocumentStatus='C'    
+group by project.fnumber,project.fxmid  ;
+
+
+--2.1销售合同
+create or alter view v_projectAllInReport_saleContract
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(saleContractFIn.FBillAllAmount) as saleContractAmount  
+from V_VRGO_Project project  --项目  
+inner join  T_CRM_CONTRACT saleContract on saleContract.F_VRGO_project=project.fxmid and saleContract.fDocumentStatus='C'  
+inner join  T_CRM_CONTRACTFIN  saleContractFIn on saleContractFIn.fid=saleContract.fid
+group by project.fnumber,project.fxmid;
+
+
+create or alter view v_projectAllInReport_saleContractAll
+as  
+select 
+sum(saleContractAll.F_VRGO_YFKAmount2) as saleContractYiShouKuanAmount  
+,sum(saleContractAll.F_VRGO_YKPAmount3) as saleContractYiKaiPiaoAmount  
+,sum(saleContractFinAll.FBillAllAmount) as saleContractAllAmount  
+from  T_CRM_CONTRACT saleContractAll 
+inner join  T_CRM_CONTRACTFIN saleContractFinAll on saleContractFinAll.fid=saleContractAll.fid
+where  saleContractAll.fDocumentStatus='C';
+
+
+--2.2销售订单
+create or alter view v_projectAllInReport_saleOrder
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(saleOrderFIn.FBillAllAmount) as saleOrderAmount  
+from V_VRGO_Project project  --项目  
+inner join  T_SAL_ORDER saleOrder on saleOrder.F_VRGO_project=project.fxmid and saleOrder.fDocumentStatus='C'  
+inner join  T_SAL_ORDERFIN  saleOrderFIn on saleOrderFIn.fid=saleOrder.fid
+group by project.fnumber,project.fxmid;
+
+
+
+--2.3销售发货通知单
+create or alter view v_projectAllInReport_saleDeliveryNotice
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(saleDeliveryNoticeFIn.FBillAllAmount) as saleDeliveryNoticeAmount  
+from V_VRGO_Project project  --项目  
+inner join  T_SAL_DELIVERYNOTICE saleDeliveryNotice on saleDeliveryNotice.F_VRGO_project=project.fxmid and saleDeliveryNotice.fDocumentStatus='C'  
+inner join  T_SAL_DELIVERYNOTICEFIN  saleDeliveryNoticeFIn on saleDeliveryNoticeFIn.fid=saleDeliveryNotice.fid
+group by project.fnumber,project.fxmid;
+
+
+--2.4销售出库单
+select  * from v_projectAllInReport_saleOutStockNotice
+
+create or alter view v_projectAllInReport_saleOutStockNotice
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(saleOutStockNoticeFIn.FBillAllAmount) as saleOutStockNoticeAmount 
+from V_VRGO_Project project  --项目  
+inner join  T_SAL_OUTSTOCK saleOutStockNotice on saleOutStockNotice.F_VRGO_project=project.fxmid and saleOutStockNotice.fDocumentStatus='C'  
+inner join  T_SAL_OUTSTOCKFIN  saleOutStockNoticeFIn on saleOutStockNoticeFIn.fid=saleOutStockNotice.fid
+group by project.fnumber,project.fxmid;
+
+
+
+--2.5销售退货单
+create or alter view v_projectAllInReport_saleReturnStockNotice
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(saleReturnStockNoticeFIn.FBillAllAmount) as saleReturnStockNoticeAmount  
+from V_VRGO_Project project  --项目  
+inner join  T_SAL_RETURNSTOCK saleReturnStockNotice on saleReturnStockNotice.F_VRGO_project=project.fxmid and saleReturnStockNotice.fDocumentStatus='C'  
+inner join  T_SAL_RETURNSTOCKFIN  saleReturnStockNoticeFIn on saleReturnStockNoticeFIn.fid=saleReturnStockNotice.fid
+group by project.fnumber,project.fxmid;
+
+
+
+
+
+
+
+报表sql：
+select project.fnumber as proNumber  
+,project.fxmid as proId  
+,Cust100003.F_VRGO_SQRQ as proSqrq
+,Cust100003.F_VRGO_xmmc as proName
+,project.FDOCUMENTSTATUS  as proStatus
+,customerl.fname as customName
+,customer.fnumber as cusNumber
+,project.F_VRGO_XMMCC as keTiHao
+,xiangMuType.fnumber as xiangMuTypeNumber
+,xiangMuTypeL.FDATAVALUE  as xiangMuTypeName
+,purOrder.purOrderDisCount
+,purReceive.purReceiveCount
+,purInstock.purInstockDisCount
+,purMrb.purMrbDisCount
+,purOrderAll.purOrderALLDisCount
+,purOrderAll.purOrderKaiPiaoAmount*purOrder.purOrderDisCount/purOrderAll.purOrderALLDisCount as  purOrderKaiPiaoAmount --开票金额
+,purOrderAll.purOrderYiFuKuanAmount*purOrder.purOrderDisCount/purOrderAll.purOrderALLDisCount as purOrderYiFuKuanAmount --付款金额
+,saleContract.saleContractAmount   --2.1销售合同
+,saleOrder.saleOrderAmount  --2.2销售订单
+,saleDeliveryNotice.saleDeliveryNoticeAmount  --2.3销售发货通知单
+,saleOutStockNotice.saleOutStockNoticeAmount  --2.4销售出库单
+,saleReturnStockNotice.saleReturnStockNoticeAmount  --2.5销售退货单
+,saleContractAll.saleContractAllAmount
+,saleContractAll.saleContractYiShouKuanAmount*saleOrder.saleOrderAmount/saleContractAll.saleContractAllAmount as  saleContractKaiPiaoAmount   --收款金额
+,saleContractAll.saleContractYiKaiPiaoAmount*saleOrder.saleOrderAmount/saleContractAll.saleContractAllAmount as saleContractYiFuKuanAmount   --付款金额
+
+from  V_VRGO_Project project
+inner join  VRGO_t_Cust100003 Cust100003 on Cust100003.fid=project.fxmid
+left join  T_BD_CUSTOMER_l  customerl on project.F_VRGO_XQKH=customerl.fcustid
+inner join  T_BD_CUSTOMER  customer on project.F_VRGO_XQKH=customer.fcustid
+inner join T_BAS_ASSISTANTDATAENTRY xiangMuType on xiangMuType.fentryid=project.F_VRGO_Assistant
+inner join T_BAS_ASSISTANTDATAENTRY_L xiangMuTypeL on xiangMuTypeL.fentryid=project.F_VRGO_Assistant
+left join v_projectAllInReport_purOrder purOrder on  purOrder.proNumber=project.FNUMBER
+left join v_projectAllInReport_purOrderAll purOrderAll on  1=1
+left join v_projectAllInReport_purReceive purReceive on purReceive.proNumber=project.FNUMBER
+left join v_projectAllInReport_purInstock purInstock on purInstock.proNumber=project.FNUMBER
+left join v_projectAllInReport_purMrb purMrb on purMrb.proNumber=project.FNUMBER
+left join v_projectAllInReport_saleContract saleContract on saleContract.proNumber=project.FNUMBER
+left join v_projectAllInReport_saleContractAll saleContractAll on 1=1
+left join v_projectAllInReport_saleOrder saleOrder on saleOrder.proNumber=project.FNUMBER
+left join v_projectAllInReport_saleDeliveryNotice saleDeliveryNotice on saleDeliveryNotice.proNumber=project.FNUMBER
+left join v_projectAllInReport_saleOutStockNotice saleOutStockNotice on saleOutStockNotice.proNumber=project.FNUMBER
+left join v_projectAllInReport_saleReturnStockNotice saleReturnStockNotice on saleReturnStockNotice.proNumber=project.FNUMBER
+
+
+where   Cust100003.F_VRGO_SQRQ>='#FBeginDate#'
+and Cust100003.F_VRGO_SQRQ<='#FendDate#'
+and project.FDOCUMENTSTATUS = '#proStatus#'
+and (customer.fnumber  >='#customeBegin#'  or '#customeBegin#'='' )
+and (customer.fnumber  <='#customeEnd#'  or '#customeEnd#'='' )
+and (project.fnumber  >='#proNumBegin#'  or '#proNumBegin#'='' )
+and (project.fnumber  <='#proNumEnd#'  or '#proNumEnd#'='' )
+and (xiangMuType.fnumber  >='#proTypeBegin#'  or '#proTypeBegin#'='' )
+and (xiangMuType.fnumber  <='#proTypeEnd#'  or '#proTypeEnd#'='' )
+

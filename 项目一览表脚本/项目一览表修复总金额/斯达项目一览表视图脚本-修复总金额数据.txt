@@ -1,0 +1,48 @@
+--1、项目一览表，采购订单
+create  or alter view v_projectAllInReport_purOrder    
+as    
+select  project.fnumber as proNumber    
+,project.fxmid as proId    
+,sum(poOrderEntry.FAllAmountExceptDisCount) as purOrderDisCount  
+from V_VRGO_Project project  --项目    
+inner join T_PUR_POORDERENTRY poOrderEntry on poOrderEntry.f_vrgo_text2=project.fnumber    
+inner join t_pur_poOrder poOrder on poOrder.fid=poOrderEntry.fid and poOrder.fDocumentStatus='C'    
+group by project.fnumber,project.fxmid ;
+
+
+
+create  or alter view v_projectAllInReport_purOrderAll    
+as    
+select 
+ sum(poOrderFinALl.FBillAllAmount) as purOrderALLDisCount 
+,sum(poOrderALl.F_VRGO_yiFuKuanAmount) as purOrderYiFuKuanAmount
+,sum(poOrderALl.F_VRGO_kaiPiaoAmount) as purOrderKaiPiaoAmount
+from t_pur_poOrder poOrderALl 
+inner join t_pur_poOrderFin poOrderFinALl on poOrderFinALl.FID=poOrderALl.FID
+where  poOrderALl.fDocumentStatus='C' ;
+
+
+
+
+--2.1销售合同
+create or alter view v_projectAllInReport_saleContract
+as  
+select  project.fnumber as proNumber  
+,project.fxmid as proId  
+,sum(saleContractFIn.FBillAllAmount) as saleContractAmount  
+from V_VRGO_Project project  --项目  
+inner join  T_CRM_CONTRACT saleContract on saleContract.F_VRGO_project=project.fxmid and saleContract.fDocumentStatus='C'  
+inner join  T_CRM_CONTRACTFIN  saleContractFIn on saleContractFIn.fid=saleContract.fid
+group by project.fnumber,project.fxmid;
+
+
+create or alter view v_projectAllInReport_saleContractAll
+as  
+select 
+sum(saleContractAll.F_VRGO_YFKAmount2) as saleContractYiShouKuanAmount  
+,sum(saleContractAll.F_VRGO_YKPAmount3) as saleContractYiKaiPiaoAmount  
+,sum(saleContractFinAll.FBillAllAmount) as saleContractAllAmount  
+from  T_CRM_CONTRACT saleContractAll 
+inner join  T_CRM_CONTRACTFIN saleContractFinAll on saleContractFinAll.fid=saleContractAll.fid
+where  saleContractAll.fDocumentStatus='C';
+
