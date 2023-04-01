@@ -1,0 +1,7 @@
+F:\Kingdee\K3Cloud\WebSite\bin\Kingdee.DFZY.sale.report.SaleAllInReport.dll
+F:\Kingdee\K3Cloud\WebSite\bin\Kingdee.DFZY.sale.report.SaleAllInReport.pdb
+F:\Kingdee\WorkSpace\Kingdee.DFZY.sale.report.SaleAllInReport\Kingdee.DFZY.sale.report.SaleAllInReport\obj\Debug\Kingdee.DFZY.sale.report.SaleAllInReport.csproj.CoreCompileInputs.cache
+F:\Kingdee\WorkSpace\Kingdee.DFZY.sale.report.SaleAllInReport\Kingdee.DFZY.sale.report.SaleAllInReport\obj\Debug\Kingdee.DFZY.sale.report.SaleAllInReport.csproj.CopyComplete
+F:\Kingdee\WorkSpace\Kingdee.DFZY.sale.report.SaleAllInReport\Kingdee.DFZY.sale.report.SaleAllInReport\obj\Debug\Kingdee.DFZY.sale.report.SaleAllInReport.dll
+F:\Kingdee\WorkSpace\Kingdee.DFZY.sale.report.SaleAllInReport\Kingdee.DFZY.sale.report.SaleAllInReport\obj\Debug\Kingdee.DFZY.sale.report.SaleAllInReport.pdb
+F:\Kingdee\WorkSpace\Kingdee.DFZY.sale.report.SaleAllInReport\Kingdee.DFZY.sale.report.SaleAllInReport\obj\Debug\Kingdee.DFZY.sale.report.SaleAllInReport.csprojAssemblyReference.cache
